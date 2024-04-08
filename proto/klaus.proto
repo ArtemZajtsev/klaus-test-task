@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package scoring;
+
+import 'google/protobuf/timestamp.proto';
+
+service Scoring {
+    rpc GetAggregatedCategoryScore (TimePeriod) returns (stream AggregatedCategoryScore);
+    rpc GetTicketScore (TicketId) returns (TicketScore);
+    rpc GetAggregatedTicketScore (TimePeriod) returns(stream AggregatedTicketScore);
+    rpc GetOverallScore (TimePeriod) returns (OverallScore);
+    rpc GetScoreChangeAgainstPreviousPeriod (TimePeriod) returns (ScoreChange);
+}
+
+// wanted to make categories enum, but db has one set of categories and example table
+// in task had different, so decided not to
+
+// enum Category {
+//     Spelling = 0;
+//     Grammar = 1;
+//     GDPR = 2;
+//     Randomness = 3;
+// }
+
+message TimePeriod {
+    google.protobuf.Timestamp startDate = 1;
+    google.protobuf.Timestamp endDate = 2;
+}
+
+// GetAggregatedCategoryScore
+message PeriodScore {
+    string period = 1;
+    int32 score = 2;
+}
+message AggregatedCategoryScore {
+    int32 id = 1;
+    string category = 2;
+    int32 ratingCount = 3;
+    repeated PeriodScore periodScore = 4;
+    int32 score = 5;
+}
+
+// GetTicketScore
+message TicketId {
+    int32 ticketId = 1;
+}
+message TicketCategoryRating {
+    string ratingCategoryName = 1;
+    int32 rating = 2;
+    // js is weird with floats, mess up numbers on client after decoding, thus i used string for weights
+    string weight = 3;
+}
+message TicketScore {
+    int32 ticketTotalScore = 1;
+    repeated TicketCategoryRating ticketCategoryRating = 2; 
+}
+
+// GetAggregatedTicketScore
+message TicketCategoryScore {
+    int32 id = 1;
+    string name = 2;
+    int32 score = 3;
+}
+message AggregatedTicketScore {
+    int32 ticketId = 1;
+    repeated TicketCategoryScore ticketCategoryScore = 2;
+}
+
+// GetOverallScore
+message OverallScore {
+    int32 overallScore = 1;
+}
+
+// GetScoreChange
+// wasn't sure what should i return, absolute change is % between periods, or relative.
+message ScoreChange {
+    int32 scoreChangeAbsolute = 1;
+    int32 scoreChangePercentageChange = 2;
+}
