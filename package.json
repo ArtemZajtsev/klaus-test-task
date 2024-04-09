@@ -8,10 +8,11 @@
 		"lint": "eslint './src/**/*.ts'",
 		"lint:fix": "npm run lint -- --fix",
 		"format": "prettier --write .",
-		"build": "npx tsc",
+		"build": "npx tsc && npm run copy-proto-to-dist",
 		"start": "node dist/src/index.js",
 		"prettier": "npx prettier --write .",
-		"generate-server-proto": "bash bash/serverStaticCodeGen.sh"
+		"generate-server-proto": "bash bash/serverStaticCodeGen.sh",
+		"copy-proto-to-dist": "npx copyfiles proto/**/*.js dist"
 	},
 	"author": "Artem Zaitsev",
 	"license": "ISC",
@@ -20,6 +21,7 @@
 		"@types/google-protobuf": "^3.15.12",
 		"@types/jest": "^29.5.12",
 		"@types/node": "^20.12.5",
+		"copyfiles": "^2.4.1",
 		"eslint": "^8.57.0",
 		"eslint-config-love": "^46.0.0",
 		"eslint-config-prettier": "^9.1.0",
@@ -38,6 +40,7 @@
 	"dependencies": {
 		"@grpc/grpc-js": "^1.10.6",
 		"@grpc/proto-loader": "^0.7.12",
+		"google-protobuf": "^3.21.2",
 		"knex": "^3.1.0",
 		"sqlite3": "^5.1.7"
 	},
