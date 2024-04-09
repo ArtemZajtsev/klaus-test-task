@@ -1,12 +1,9 @@
 import { TimePeriod } from "../proto/server/klaus_pb";
-import { Db } from "./db";
 import { RatingWithCategory, RatingsAggregatedForScoring } from "./types";
 
 const ONE_DAY_IN_SECONDS = 24 * 60 * 60;
 export const MONTH_IN_SECONDS = 30 * ONE_DAY_IN_SECONDS;
 export const MAX_RATING = 5;
-
-const db = Db.getDbConnectionInstance();
 
 export function getStartEndDate(timePeriod: TimePeriod) {
     const startDate = timePeriod.getStartdate()?.getSeconds();
@@ -29,7 +26,7 @@ export function getStartEndDate(timePeriod: TimePeriod) {
 
 export function calculateAverageScore(ratingsSum: number, ratingsCount: number): number {
     if (ratingsCount === 0) {
-        throw new Error('cant calculate score for 0 ratiungs');
+        throw new Error('cant calculate score for 0 ratings');
     }
 
     return Math.round((ratingsSum / ratingsCount) * 20);
@@ -91,5 +88,5 @@ export function getPreviousPeriod(startDate: number, endDate: number) {
     const previousPeriodStartDate = startDate - periodDuration;
 
     // - 1 so that previous end date would not overlap with current start date
-    return [previousPeriodStartDate, startDate - 1];
+    return [previousPeriodStartDate - 1, startDate - 1];
 }

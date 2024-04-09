@@ -6,7 +6,7 @@ export type RatingWithCategory = {
     reviewer_id: number,
     reviewee_id: number,
     created_at: string,
-    name: string // category names to enum?
+    name: string, // category names to enum?
     weight: number
 };
 
