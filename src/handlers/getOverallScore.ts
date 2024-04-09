@@ -9,34 +9,50 @@
 // 		"nanos": 0
 // 	}
 // }
-import * as grpc from "@grpc/grpc-js";
-import { ServerErrorResponse, ServerUnaryCall, sendUnaryData } from "@grpc/grpc-js";
-import { OverallScore, TimePeriod } from "../../proto/server/klaus_pb";
-import { Db } from "../db";
-import { aggregateRatingsForScoring, getStartEndDate, getWeightedScore } from "../utils";
+import * as grpc from '@grpc/grpc-js';
+import {
+	ServerErrorResponse,
+	ServerUnaryCall,
+	sendUnaryData
+} from '@grpc/grpc-js';
+import { OverallScore, TimePeriod } from '../../proto/server/klaus_pb';
+import { Db } from '../db';
+import {
+	aggregateRatingsForScoring,
+	getStartEndDate,
+	getWeightedScore
+} from '../utils';
 
 const db = Db.getDbConnectionInstance();
 
 // wasnt stated directly in a task but i assumed it needs weighted overall score
 export async function getOverallScore(
-    call: ServerUnaryCall<TimePeriod, OverallScore>,
-    callback: sendUnaryData<OverallScore>,
+	call: ServerUnaryCall<TimePeriod, OverallScore>,
+	callback: sendUnaryData<OverallScore>
 ) {
-    try {
-        const [startDate, endDate] = getStartEndDate(call.request);
+	try {
+		const [startDate, endDate] = getStartEndDate(call.request);
 
-        const ratingsOverPeriod = await db.getRatingsWithCategoriesByPeriod(startDate, endDate);
-        if (!ratingsOverPeriod.length) {
-            callback({code: grpc.status.NOT_FOUND, details: 'no ratings in provided period'});
-        }
+		const ratingsOverPeriod = await db.getRatingsWithCategoriesByPeriod(
+			startDate,
+			endDate
+		);
+		if (!ratingsOverPeriod.length) {
+			callback({
+				code: grpc.status.NOT_FOUND,
+				details: 'no ratings in provided period'
+			});
+		}
 
-        const score = getWeightedScore(aggregateRatingsForScoring(ratingsOverPeriod));
+		const score = getWeightedScore(
+			aggregateRatingsForScoring(ratingsOverPeriod)
+		);
 
-        const overallScore = new OverallScore();
-        overallScore.setOverallscore(score);
+		const overallScore = new OverallScore();
+		overallScore.setOverallscore(score);
 
-        callback(null, overallScore);
-    } catch (err) {
-        callback(err as ServerErrorResponse, null);
-    }
+		callback(null, overallScore);
+	} catch (err) {
+		callback(err as ServerErrorResponse, null);
+	}
 }
