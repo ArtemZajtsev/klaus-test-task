@@ -1,6 +1,6 @@
 ## General
 
-This is my first time using gRPC. Initially i started with dynamic proto codegen becasue most of the tutorials use it, but down the line switched to static code gen since it provides classes and types i needed for easier development. When dockerizing decided not to mount db since we dont need persistence storage here, i just copied db file over.
+This is my first time using gRPC. Initially i started with dynamic proto codegen becasue most of the tutorials use it, but down the line switched to static code gen since it provides classes and types i needed for easier development. When dockerizing decided not to mount db since we dont need persistence storage here, i just copied db file over. Also had to make `copy-proto-to-dist` npm script to copy generated proto files into ts output folder.
 
 If there are any changes in [klaus.proto](./proto/klaus.proto) one have to re-run `npm run generate-server-proto` to re generate files. Also dont forget to import updated klaus.proto into your postman/insomnia.
 
