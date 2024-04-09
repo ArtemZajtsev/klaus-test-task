@@ -10,13 +10,14 @@
 // 	}
 // }
 
-import * as grpc from '@grpc/grpc-js';
-import {
+import type {
 	ServerErrorResponse,
 	ServerUnaryCall,
 	sendUnaryData
 } from '@grpc/grpc-js';
-import { ScoreChange, TimePeriod } from '../../proto/server/klaus_pb';
+import * as grpc from '@grpc/grpc-js';
+import type { TimePeriod } from '../../proto/server/klaus_pb';
+import { ScoreChange } from '../../proto/server/klaus_pb';
 import { Db } from '../db';
 import {
 	aggregateRatingsForScoring,
@@ -33,10 +34,7 @@ export async function getScoreChangeAgainstPreviousPeriod(
 ) {
 	try {
 		const [startDate, endDate] = getStartEndDate(call.request);
-		const [previousStartDate, previousEndDate] = getPreviousPeriod(
-			startDate,
-			endDate
-		);
+		const [previousStartDate, previousEndDate] = getPreviousPeriod(startDate, endDate);
 
 		const ratingsOverCurrentPeriod =
 			await db.getRatingsWithCategoriesByPeriod(startDate, endDate);

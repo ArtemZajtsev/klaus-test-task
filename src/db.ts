@@ -47,8 +47,4 @@ export class Db {
 				`WHERE unixepoch(r.created_at) BETWEEN ${startTime} AND ${endTime} `
 		);
 	}
-
-	public getRatingCategories() {
-		return this.client.raw('SELECT * FROM rating_categories ');
-	}
 }

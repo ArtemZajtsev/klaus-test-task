@@ -9,13 +9,14 @@
 // 		"nanos": 0
 // 	}
 // }
-import * as grpc from '@grpc/grpc-js';
-import {
+import type {
 	ServerErrorResponse,
 	ServerUnaryCall,
 	sendUnaryData
 } from '@grpc/grpc-js';
-import { OverallScore, TimePeriod } from '../../proto/server/klaus_pb';
+import * as grpc from '@grpc/grpc-js';
+import type { TimePeriod } from '../../proto/server/klaus_pb';
+import { OverallScore } from '../../proto/server/klaus_pb';
 import { Db } from '../db';
 import {
 	aggregateRatingsForScoring,

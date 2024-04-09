@@ -6,19 +6,19 @@
 // {
 // 	"ticketId": 129177
 // }
-import * as grpc from '@grpc/grpc-js';
-import {
+import type {
 	ServerErrorResponse,
 	ServerUnaryCall,
 	sendUnaryData
 } from '@grpc/grpc-js';
+import * as grpc from '@grpc/grpc-js';
+import type { TicketId } from '../../proto/server/klaus_pb';
 import {
 	TicketCategoryRating,
-	TicketId,
 	TicketScore
 } from '../../proto/server/klaus_pb';
 import { Db } from '../db';
-import { RatingWithCategory } from '../types';
+import type { RatingWithCategory } from '../types';
 import { aggregateRatingsForScoring, getWeightedScore } from '../utils';
 
 const db = Db.getDbConnectionInstance();
@@ -57,7 +57,7 @@ export async function getTicketScore(
 		ticketScore.setTickettotalscore(weightedTicketScore);
 		ticketScore.setTicketcategoryratingList(ticketCategoryRatingList);
 
-		return callback(null, ticketScore);
+		callback(null, ticketScore);
 	} catch (err) {
 		callback(err as ServerErrorResponse, null);
 	}

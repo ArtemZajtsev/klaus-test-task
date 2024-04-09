@@ -9,15 +9,15 @@
 // 		"nanos": 0
 // 	}
 // }
+import type { ServerWritableStream } from '@grpc/grpc-js';
 import * as grpc from '@grpc/grpc-js';
-import { ServerWritableStream } from '@grpc/grpc-js';
+import type { TimePeriod } from '../../proto/server/klaus_pb';
 import {
 	AggregatedTicketScore,
-	TicketCategoryScore,
-	TimePeriod
+	TicketCategoryScore
 } from '../../proto/server/klaus_pb';
 import { Db } from '../db';
-import { RatingWithCategory, RatingsAggregatedByTicket } from '../types';
+import type { RatingWithCategory, RatingsAggregatedByTicket } from '../types';
 import { calculateAverageScore, getStartEndDate } from '../utils';
 
 const db = Db.getDbConnectionInstance();
@@ -50,29 +50,21 @@ export async function getAggregatedTicketScore(
 				ratingsAggregatedByTicket[currentTicketId] = {};
 			}
 
-			if (
-				!ratingsAggregatedByTicket[currentTicketId][currentCategoryId]
-			) {
+			if (!ratingsAggregatedByTicket[currentTicketId][currentCategoryId]) {
 				ratingsAggregatedByTicket[currentTicketId][currentCategoryId] =
 					{
 						categoryName: ratingWithCategory.name,
 						ratings: [ratingWithCategory.rating]
 					};
 			} else {
-				ratingsAggregatedByTicket[currentTicketId][
-					currentCategoryId
-				].ratings.push(ratingWithCategory.rating);
+				ratingsAggregatedByTicket[currentTicketId][currentCategoryId].ratings.push(ratingWithCategory.rating);
 			}
 		});
 
-		for (const [ticketId, ticketCategoriesWithRatings] of Object.entries(
-			ratingsAggregatedByTicket
-		)) {
+		for (const [ticketId, ticketCategoriesWithRatings] of Object.entries(ratingsAggregatedByTicket)) {
 			const ticketCategoryScoresList: TicketCategoryScore[] = [];
 
-			for (const [categoryId, ticketCategory] of Object.entries(
-				ticketCategoriesWithRatings
-			)) {
+			for (const [categoryId, ticketCategory] of Object.entries(ticketCategoriesWithRatings)) {
 				const ticketCategoryScore = new TicketCategoryScore();
 				const ticketCategoryRatingsSum = ticketCategory.ratings.reduce(
 					(acc, val) => {
@@ -93,9 +85,7 @@ export async function getAggregatedTicketScore(
 
 			const aggregatedTicketScore = new AggregatedTicketScore();
 			aggregatedTicketScore.setTicketid(Number(ticketId));
-			aggregatedTicketScore.setTicketcategoryscoreList(
-				ticketCategoryScoresList
-			);
+			aggregatedTicketScore.setTicketcategoryscoreList(ticketCategoryScoresList);
 
 			call.write(aggregatedTicketScore);
 		}

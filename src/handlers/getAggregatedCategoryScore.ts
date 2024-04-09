@@ -9,15 +9,15 @@
 // 		"nanos": 0
 // 	}
 // }
+import type { ServerWritableStream } from '@grpc/grpc-js';
 import * as grpc from '@grpc/grpc-js';
-import { ServerWritableStream } from '@grpc/grpc-js';
+import type { TimePeriod } from '../../proto/server/klaus_pb';
 import {
 	AggregatedCategoryScore,
-	PeriodScore,
-	TimePeriod
+	PeriodScore
 } from '../../proto/server/klaus_pb';
 import { Db } from '../db';
-import { RatingWithCategory, RatingsAggregatedByCategory } from '../types';
+import type { RatingWithCategory, RatingsAggregatedByCategory } from '../types';
 import {
 	MONTH_IN_SECONDS,
 	calculateAverageScore,
@@ -66,19 +66,9 @@ export async function getAggregatedCategoryScore(
 				ratingsAggregatedByCategory[currentCategoryId].ratingsCount++;
 				ratingsAggregatedByCategory[currentCategoryId].ratingsSum +=
 					ratingWithCategory.rating;
-				ratingsAggregatedByCategory[currentCategoryId].ratingsByPeriod[
-					period
-				]
-					? ratingsAggregatedByCategory[
-							currentCategoryId
-						].ratingsByPeriod[period].push(
-							ratingWithCategory.rating
-						)
-					: (ratingsAggregatedByCategory[
-							currentCategoryId
-						].ratingsByPeriod[period] = [
-							ratingWithCategory.rating
-						]);
+				ratingsAggregatedByCategory[currentCategoryId].ratingsByPeriod[period] ?
+					ratingsAggregatedByCategory[currentCategoryId].ratingsByPeriod[period].push(ratingWithCategory.rating) :
+					ratingsAggregatedByCategory[currentCategoryId].ratingsByPeriod[period] = [ratingWithCategory.rating];
 			}
 		});
 

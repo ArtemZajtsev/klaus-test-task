@@ -1,5 +1,5 @@
-import { TimePeriod } from '../proto/server/klaus_pb';
-import { RatingWithCategory, RatingsAggregatedForScoring } from './types';
+import type { TimePeriod } from '../proto/server/klaus_pb';
+import type { RatingWithCategory, RatingsAggregatedForScoring } from './types';
 
 const ONE_DAY_IN_SECONDS = 24 * 60 * 60;
 export const MONTH_IN_SECONDS = 30 * ONE_DAY_IN_SECONDS;
@@ -50,7 +50,7 @@ export function getWeekNumber(date: Date) {
 	const firstDayOfYear = new Date(
 		Date.UTC(firstDayOfWeek.getUTCFullYear(), 0, 1)
 	);
-	// @ts-ignore
+	// @ts-expect-error: you can substract dates
 	const timeDifference = firstDayOfWeek - firstDayOfYear;
 	const daysDifference = timeDifference / millisecondsInDay;
 
@@ -84,9 +84,7 @@ export function getWeightedScore(
 	let totalRatingsWeightedSum = 0;
 	let totalWeight = 0;
 
-	for (const [categoryId, categoryAggregated] of Object.entries(
-		ratingsAggregatedForScoring
-	)) {
+	for (const [, categoryAggregated] of Object.entries(ratingsAggregatedForScoring)) {
 		const categoryRatingsWeightedSum = categoryAggregated.ratings.reduce(
 			(acc, val) => {
 				totalWeight += categoryAggregated.weight;
