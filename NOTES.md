@@ -34,7 +34,8 @@ Come up with ticket score algorithm that accounts for rating category weights (a
 Algorithm can be seen implemented in [utils.js](./src/utils.ts) file in `getWeightedScore` function. Basic idea is that we sum up all weighted ratings and divide it by (sum of all weights * maximum rating), and multiply it by 100 to get percentage format. Also round it up.
 
 Formula:
-$$ round({ \sum (categoryWeight*rating) \over \sum (allWeightsUsedInRatings) * maxScore} * 100) $$
+
+$$round({ \sum (categoryWeight*rating) \over \sum (allWeightsUsedInRatings) * maxScore} * 100)$$
 
 Used it in [getTicketScore.ts](./src/handlers/getTicketScore.ts) endpoint handler. It calculates and returns weighted score for selected ticket along with categories and their weights for easier manual testing. Unary response
 
