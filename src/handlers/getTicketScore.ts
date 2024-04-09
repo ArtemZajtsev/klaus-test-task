@@ -1,11 +1,3 @@
-// payload example
-// {
-// 	"ticketId": 283728
-// }
-
-// {
-// 	"ticketId": 129177
-// }
 import type {
 	ServerErrorResponse,
 	ServerUnaryCall,

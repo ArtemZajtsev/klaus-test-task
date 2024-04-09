@@ -1,15 +1,3 @@
-// example payload
-// {
-// 	"startDate": {
-// 		"seconds": 1563310800,
-// 		"nanos": 0
-// 	},
-// 	"endDate": {
-// 		"seconds": 1563325200,
-// 		"nanos": 0
-// 	}
-// }
-
 import type {
 	ServerErrorResponse,
 	ServerUnaryCall,

@@ -1,3 +1,5 @@
+My notes can be found here [here](NOTES.md)
+
 # Software Engineer Test Task
 
 As a test task for [Klaus](https://www.klausapp.com) software engineering position we ask our candidates to build a small [gRPC](https://grpc.io) service using language of their choice. Preferred language for new services in Klaus is [Go](https://golang.org).

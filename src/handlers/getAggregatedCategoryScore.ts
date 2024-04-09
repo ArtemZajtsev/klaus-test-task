@@ -1,14 +1,3 @@
-// payload example
-// {
-// 	"startDate": {
-// 		"seconds": 1563310800,
-// 		"nanos": 0
-// 	},
-// 	"endDate": {
-// 		"seconds": 1563332400,
-// 		"nanos": 0
-// 	}
-// }
 import type { ServerWritableStream } from '@grpc/grpc-js';
 import * as grpc from '@grpc/grpc-js';
 import type { TimePeriod } from '../../proto/server/klaus_pb';
@@ -72,14 +61,10 @@ export async function getAggregatedCategoryScore(
 			}
 		});
 
-		for (const [categoryId, aggregatedCategory] of Object.entries(
-			ratingsAggregatedByCategory
-		)) {
+		for (const [categoryId, aggregatedCategory] of Object.entries(ratingsAggregatedByCategory)) {
 			const categoryPeriodScores: PeriodScore[] = [];
 
-			for (const [periodName, periodRatings] of Object.entries(
-				aggregatedCategory.ratingsByPeriod
-			)) {
+			for (const [periodName, periodRatings] of Object.entries(aggregatedCategory.ratingsByPeriod)) {
 				const periodScore = new PeriodScore();
 				const periodRatingsSum = periodRatings.reduce((acc, val) => {
 					return acc + val;
