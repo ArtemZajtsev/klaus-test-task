@@ -42,6 +42,7 @@
 		"sqlite3": "^5.1.7"
 	},
 	"pre-commit": [
+		"lint",
 		"test"
 	]
 }
